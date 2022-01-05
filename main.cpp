@@ -44,8 +44,11 @@ struct Publication{
     for(int i = 0; i < strlen(author); i++){
       authorStr.push_back(author[i]);
     }
-    string mess = titleStr + " ; " + authorStr + " ; " + to_string(releaseDate) + " ; " + category + " ; "
-        + to_string(itemsNumber) + " ; " + to_string(pagesNumber);
+    string mess = "Tytul: " + titleStr + " | " + "autor: " + authorStr + " | " + "data wydania: " + to_string(releaseDate) + " | "
+        + "kategoria: " + category + " | " + "liczba stron: " + to_string(pagesNumber) + " | "
+        + "liczba egzemplarzy: " + to_string(itemsNumber);
+/*    string toSave = titleStr + " ; " + authorStr + " ; " + to_string(releaseDate) + " ; " + category + " ; "
+        + to_string(itemsNumber) + " ; " + to_string(pagesNumber);*/
     return mess;
   }
 };
@@ -73,7 +76,7 @@ map<const int, string> optionMap{
 //Data base **************************************************************************************************
 vector<Publication> publications;
 //App name ---------------------------------------------------------------------------------------------------
-const string appName = "Library System v0.41";
+const string appName = "Library System v0.45";
 //Main ****************************************************************************************************
 int main() {
   printLine(appName);
@@ -130,8 +133,7 @@ void addPublication() {
   Publication newPublication = createPublication();
   checkPublication(&newPublication);
   publications.push_back(newPublication);
-  printLine("Dodano: ");
-  printLine(newPublication.toString());
+  printLine("Dodano: " + newPublication.toString());
 }
 //***
 //Create new publication
@@ -146,10 +148,11 @@ Publication createPublication(){
   int pagesNumber;
 
   printLine("Podaj tytul: ");
-  cin >> title;
+  cin.ignore();
+  getline(cin, title);
   titleCh = &title[0];
   printLine("Podaj autora dziela: ");
-  cin >> author;
+  getline(cin, author);
   authorCh = &author[0];
   printLine("Podaj date wydania: ");
   cin >> releaseDate;
