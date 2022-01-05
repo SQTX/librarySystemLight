@@ -8,7 +8,9 @@ using namespace std;
 void printLine(string txt);
 void printOptions();
 void controlLoop();
+//Switch options
 void addPublication();
+//void deletePublication();
 void exitApp();
 //Variables **********************************************************************************************
 struct Publication{
@@ -81,9 +83,9 @@ int main() {
 }
 //Functions ************************************************************************************************
 void controlLoop() {
-  printOptions();
   int choice;
   do{
+    printOptions();
     choice = 0; //Overwriting variable
     cin >> choice;
     switch (choice) {
@@ -91,7 +93,7 @@ void controlLoop() {
         addPublication();
         break;
       case DELETE_PUBLICATION:
-//        deleteBook();
+//        deletePublication();
         break;
       case EDIT_PUBLICATION:
 //        editBook();
@@ -109,6 +111,7 @@ void controlLoop() {
         exitApp();
         break;
     }
+//    TODO czyszczenie ekranu po kliknięciu
   }while(choice != EXIT);
 }
 void printOptions(){
@@ -121,14 +124,17 @@ void printOptions(){
 
 //Add Publication Func. ---------------------------------------------------------------------------------------------
 Publication createPublication();
+void checkPublication(Publication*);
 //***
 void addPublication() {
   Publication newPublication = createPublication();
+  checkPublication(&newPublication);
   publications.push_back(newPublication);
-  printLine("Doadano: ");
+  printLine("Dodano: ");
   printLine(newPublication.toString());
 }
 //***
+//Create new publication
 Publication createPublication(){
   bool dataRight = false;
   char* titleCh;
@@ -164,6 +170,30 @@ Publication createPublication(){
                              pagesNumber);
   return newPublication;
 }
+//Checks if the publication exists later
+void checkPublication(Publication* newPublic){
+  if(publications.size() == 0){
+    newPublic->itemsNumber = 1;
+    cout << "pierwsza" << endl;
+  }else{
+    for(Publication pub : publications){
+      cout << newPublic->title << endl;
+      cout << pub.title << endl;
+      cout << (strcmp(newPublic->title,pub.title)) << endl;
+      if(strcmp(newPublic->title,pub.title) == 0 && strcmp(newPublic->author,pub.author) == 0 &&
+      (newPublic->category == pub.category)){
+        newPublic->itemsNumber = pub.itemsNumber+1;
+      }else{
+        newPublic->itemsNumber = 1;
+      }
+    }
+  }
+}
+
+//Delete Publication Func. ---------------------------------------------------------------------------------------------
+/*void deletePublication(){
+  cout << "ba ba" << endl;
+};*/
 
 //Exit Func. ---------------------------------------------------------------------------------------------------
 void exitApp(){
