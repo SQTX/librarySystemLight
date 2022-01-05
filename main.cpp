@@ -73,7 +73,7 @@ map<const int, string> optionMap{
 //Data base **************************************************************************************************
 vector<Publication> publications;
 //App name ---------------------------------------------------------------------------------------------------
-const string appName = "Library System v0.3";
+const string appName = "Library System v0.41";
 //Main ****************************************************************************************************
 int main() {
   printLine(appName);
