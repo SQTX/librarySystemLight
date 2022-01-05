@@ -1,15 +1,15 @@
 //Includes & namespace*************************************************************************************
 #include <iostream>
 #include <string.h>
+#include <vector>
 #include <map>
 using namespace std;
 //Functions init *****************************************************************************************
 void printLine(string txt);
 void printOptions();
 void controlLoop();
-
+void addPublication();
 void exitApp();
-
 //Variables **********************************************************************************************
 struct Publication{
   char title[256];
@@ -32,9 +32,23 @@ struct Publication{
     this->lastReturnDate = lastReturnDate;
     this->pagesNumber = pagesNumber;
   }
+
+  string toString(){
+    string titleStr;
+    string authorStr;
+    for(int i = 0; i < strlen(title); i++){
+      titleStr.push_back(title[i]);
+    }
+    for(int i = 0; i < strlen(author); i++){
+      authorStr.push_back(author[i]);
+    }
+    string mess = titleStr + " ; " + authorStr + " ; " + to_string(releaseDate) + " ; " + category + " ; "
+        + to_string(itemsNumber) + " ; " + to_string(pagesNumber);
+    return mess;
+  }
 };
 
-//Options -----------
+//Options ---------------------------------------------------------------------------------------------------
 enum options{
   EXIT = 0,
   ADD_PUBLICATION,
@@ -54,8 +68,10 @@ map<const int, string> optionMap{
     {BORROW_PUBLICATION, "dokonaj zwrotu"},
     {FIND_PUBLICATION, "znajdz konkretna oublikacje"},
 };
-//App name --------------
-const string appName = "Library System v0.2";
+//Data base **************************************************************************************************
+vector<Publication> publications;
+//App name ---------------------------------------------------------------------------------------------------
+const string appName = "Library System v0.3";
 //Main ****************************************************************************************************
 int main() {
   printLine(appName);
@@ -64,7 +80,6 @@ int main() {
   return 0;
 }
 //Functions ************************************************************************************************
-
 void controlLoop() {
   printOptions();
   int choice;
@@ -73,7 +88,7 @@ void controlLoop() {
     cin >> choice;
     switch (choice) {
       case ADD_PUBLICATION:
-//        addBook();
+        addPublication();
         break;
       case DELETE_PUBLICATION:
 //        deleteBook();
@@ -104,12 +119,58 @@ void printOptions(){
   }
 }
 
-//Exit Func.----------
+//Add Publication Func. ---------------------------------------------------------------------------------------------
+Publication createPublication();
+//***
+void addPublication() {
+  Publication newPublication = createPublication();
+  publications.push_back(newPublication);
+  printLine("Doadano: ");
+  printLine(newPublication.toString());
+}
+//***
+Publication createPublication(){
+  bool dataRight = false;
+  char* titleCh;
+  string title;
+  char* authorCh;
+  string author;
+  int releaseDate;
+  string category;
+  int pagesNumber;
+
+  printLine("Podaj tytul: ");
+  cin >> title;
+  titleCh = &title[0];
+  printLine("Podaj autora dziela: ");
+  cin >> author;
+  authorCh = &author[0];
+  printLine("Podaj date wydania: ");
+  cin >> releaseDate;
+  do{
+    printLine("Podaj kategorie: (ksiazka/czasopismo/rocznik)");
+    cin >> category;
+    if(category == "ksiazka" || category == "czasopismo" || category == "rocznik"){
+      dataRight = true;
+    }else{
+      printLine("Podana kategoria nie istnieje");
+    }
+  }while(!dataRight);
+  printLine("Podaj liczbe stron: ");
+  cin >> pagesNumber;
+
+
+  Publication newPublication(titleCh, authorCh, releaseDate, category, 0, 0, "",
+                             pagesNumber);
+  return newPublication;
+}
+
+//Exit Func. ---------------------------------------------------------------------------------------------------
 void exitApp(){
   printLine("Koniec programu");
 }
 
-//Printer----------
+//Printer ---------------------------------------------------------------------------------------------------
 void printLine(string txt){
   cout << txt << endl;
 }
